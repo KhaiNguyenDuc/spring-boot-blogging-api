@@ -50,8 +50,7 @@ public class BlogRequest {
 		}
 		
 	}
-
-	@JsonIgnore
+	
 	public List<Tag> getTags() {
 		return tags == null ? null : new ArrayList<>(this.tags);
 	}

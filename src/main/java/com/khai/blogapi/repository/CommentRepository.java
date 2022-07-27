@@ -6,14 +6,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import com.khai.blogapi.model.Blog;
-import com.khai.blogapi.model.Category;
-import com.khai.blogapi.model.Tag;
+import com.khai.blogapi.model.Comment;
 
 @Repository
-public interface BlogRepository extends JpaRepository<Blog, Long> {
+public interface CommentRepository extends JpaRepository<Comment, Long> {
 
-	List<Blog> findByCategory(Category category);
-
-	List<Blog> findByTags(Tag tag);
+	List<Comment> findByBlog(Blog blog);
 
 }

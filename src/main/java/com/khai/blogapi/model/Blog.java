@@ -75,7 +75,6 @@ public class Blog {
 			)
 	private List<Tag> tags;
 
-	@JsonIgnore
 	public List<Comment> getComments() {
 		return comments == null ? null : new ArrayList<>(this.comments);
 	}
@@ -89,7 +88,6 @@ public class Blog {
 		
 	}
 
-	@JsonIgnore
 	public List<Tag> getTags() {
 		return tags == null ? null : new ArrayList<>(this.tags);
 	}
