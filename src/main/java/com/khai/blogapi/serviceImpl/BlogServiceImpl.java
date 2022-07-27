@@ -5,18 +5,24 @@ import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.khai.blogapi.exception.ResourceNotFoundException;
 import com.khai.blogapi.model.Blog;
 import com.khai.blogapi.model.Category;
 import com.khai.blogapi.model.Tag;
+import com.khai.blogapi.payload.BlogRequest;
 import com.khai.blogapi.payload.BlogResponse;
+import com.khai.blogapi.payload.PageResponse;
 import com.khai.blogapi.repository.BlogRepository;
 import com.khai.blogapi.repository.CategoryRepository;
 import com.khai.blogapi.repository.TagRepository;
 import com.khai.blogapi.service.BlogService;
 import com.khai.blogapi.utils.AppConstant;
+import com.khai.blogapi.utils.AppUtils;
 @Service
 public class BlogServiceImpl implements BlogService{
 
@@ -33,15 +39,26 @@ public class BlogServiceImpl implements BlogService{
 	ModelMapper modelMapper;
 	
 	@Override
-	public List<BlogResponse> getAllBlogs() {
-		List<Blog> blogs = blogRepository.findAll();
+	public PageResponse<BlogResponse> getAllBlogs(Integer page, Integer size) {
+		AppUtils.validatePageAndSize(page, size);
+		Pageable pageable = PageRequest.of(page, size);
+		Page<Blog> blogs = blogRepository.findAll(pageable);
 		List<BlogResponse> blogResponses = Arrays.asList(modelMapper.map(
-				blogs, BlogResponse[].class));
-		return blogResponses;
+				blogs.getContent(), BlogResponse[].class));
+		
+		PageResponse<BlogResponse> pageResponse = new PageResponse<>();
+		pageResponse.setContent(blogResponses);
+		pageResponse.setSize(size);
+		pageResponse.setPage(page);
+		pageResponse.setTotalElements(blogs.getNumberOfElements());
+		pageResponse.setTotalPages(blogs.getTotalPages());
+		pageResponse.setLast(blogs.isLast());
+		
+		return pageResponse;
 	}
 
 	@Override
-	public BlogResponse getAllBlogs(Long blogId) {
+	public BlogResponse getBlogsById(Long blogId) {
 		Blog blog = blogRepository.findById(blogId)
 				.orElseThrow(() -> new ResourceNotFoundException(
 						AppConstant.BLOG_NOT_FOUND + blogId));
@@ -49,22 +66,58 @@ public class BlogServiceImpl implements BlogService{
 	}
 
 	@Override
-	public List<BlogResponse> getBlogsByCategory(Long categoryId) {
+	public PageResponse<BlogResponse> getBlogsByCategory(Long categoryId,Integer page, Integer size) {
+		
+		AppUtils.validatePageAndSize(page, size);
+		Pageable pageable = PageRequest.of(page, size);
 		Category category = categoryRepository.findById(categoryId)
 				.orElseThrow(() -> new ResourceNotFoundException(
 						AppConstant.CATEGORY_NOT_FOUND + categoryId));
-		List<Blog> blogs = blogRepository.findByCategory(category);
-		return Arrays.asList(modelMapper.map(blogs,BlogResponse[].class));
+	
+		Page<Blog> blogs = blogRepository.findByCategory(category, pageable);
+		
+		List<BlogResponse> blogResponses =  Arrays.asList(modelMapper.map(blogs.getContent(),BlogResponse[].class));
+		PageResponse<BlogResponse> pageResponse = new PageResponse<>();
+		pageResponse.setContent(blogResponses);
+		pageResponse.setSize(size);
+		pageResponse.setPage(page);
+		pageResponse.setTotalElements(blogs.getNumberOfElements());
+		pageResponse.setTotalPages(blogs.getTotalPages());
+		pageResponse.setLast(blogs.isLast());
+		
+		return pageResponse;
 	}
 
 	@Override
-	public List<BlogResponse> getBlogsByTag(Long tagId) {
+	public PageResponse<BlogResponse> getBlogsByTag(Long tagId, Integer page, Integer size) {
+		AppUtils.validatePageAndSize(page, size);
+		Pageable pageable = PageRequest.of(page, size);	
 		Tag tag = tagRepository.findById(tagId)
 				.orElseThrow(() -> new ResourceNotFoundException(
 						AppConstant.TAG_NOT_FOUND + tagId));
-		List<Blog> blogs = blogRepository.findByTags(tag);
-		return Arrays.asList(modelMapper.map(blogs,BlogResponse[].class));
+		
+		Page<Blog> blogs = blogRepository.findByTags(tag, pageable);
+		
+		List<BlogResponse> blogResponses = Arrays.asList(modelMapper.map(blogs.getContent(),BlogResponse[].class));
+		
+		PageResponse<BlogResponse> pageResponse = new PageResponse<>();
+		pageResponse.setContent(blogResponses);
+		pageResponse.setSize(size);
+		pageResponse.setPage(page);
+		pageResponse.setTotalElements(blogs.getNumberOfElements());
+		pageResponse.setTotalPages(blogs.getTotalPages());
+		pageResponse.setLast(blogs.isLast());
+		
+		return pageResponse;
 	}
+
+	@Override
+	public BlogResponse addBlog(BlogRequest blogRequest) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
 	
 	
 }

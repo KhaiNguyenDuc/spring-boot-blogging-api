@@ -2,6 +2,8 @@ package com.khai.blogapi.repository;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -12,8 +14,8 @@ import com.khai.blogapi.model.Tag;
 @Repository
 public interface BlogRepository extends JpaRepository<Blog, Long> {
 
-	List<Blog> findByCategory(Category category);
+	Page<Blog> findByCategory(Category category, Pageable pageable);
 
-	List<Blog> findByTags(Tag tag);
+	Page<Blog> findByTags(Tag tag, Pageable pageable);
 
 }

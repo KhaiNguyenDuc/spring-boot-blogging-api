@@ -1,17 +1,19 @@
 package com.khai.blogapi.service;
 
-import java.util.List;
-
+import com.khai.blogapi.payload.BlogRequest;
 import com.khai.blogapi.payload.BlogResponse;
+import com.khai.blogapi.payload.PageResponse;
 
 public interface BlogService {
 
-	List<BlogResponse> getAllBlogs();
+	PageResponse<BlogResponse> getAllBlogs(Integer page, Integer size);
 
-	BlogResponse getAllBlogs(Long blogId);
+	BlogResponse getBlogsById(Long blogId);
 
-	List<BlogResponse> getBlogsByCategory(Long categoryId);
+	PageResponse<BlogResponse> getBlogsByCategory(Long categoryId, Integer page, Integer size);
 
-	List<BlogResponse> getBlogsByTag(Long tagId);
+	PageResponse<BlogResponse> getBlogsByTag(Long tagId, Integer page, Integer size);
+
+	BlogResponse addBlog(BlogRequest blogRequest);
 
 }

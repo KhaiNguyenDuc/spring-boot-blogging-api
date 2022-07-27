@@ -1,19 +1,23 @@
 package com.khai.blogapi.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.khai.blogapi.payload.BlogResponse;
+import com.khai.blogapi.payload.PageResponse;
+import com.khai.blogapi.payload.TagRequest;
 import com.khai.blogapi.payload.TagResponse;
 import com.khai.blogapi.service.BlogService;
 import com.khai.blogapi.service.TagService;
+import com.khai.blogapi.utils.AppConstant;
 
 @RestController
 @RequestMapping("api/v1/tags")
@@ -26,8 +30,10 @@ public class TagController {
 	BlogService blogService;
 	
 	@GetMapping
-	public ResponseEntity<List<TagResponse>> getAllTags(){
-		List<TagResponse> tagResponses = tagService.getAllTags();
+	public ResponseEntity<PageResponse<TagResponse>> getAllTags(
+			@RequestParam(value = "page", required = false, defaultValue =  AppConstant.DEFAULT_PAGE_NUMBER) Integer page,
+			@RequestParam(value = "size", required = false, defaultValue = AppConstant.DEFAULT_PAGE_SIZE) Integer size){
+		PageResponse<TagResponse> tagResponses = tagService.getAllTags(page,size);
 		return new ResponseEntity<>(tagResponses,HttpStatus.OK);
 	}
 	
@@ -39,10 +45,19 @@ public class TagController {
 	}
 	
 	@GetMapping("/{tag_id}/blogs")
-	public ResponseEntity<List<BlogResponse>> getBlogsByTag(
-			@PathVariable("tag_id") Long tagId){
-		List<BlogResponse> blogResponses = blogService.getBlogsByTag(tagId);
+	public ResponseEntity<PageResponse<BlogResponse>> getBlogsByTag(
+			@PathVariable("tag_id") Long tagId,
+			@RequestParam(value = "page", defaultValue = AppConstant.DEFAULT_PAGE_NUMBER) Integer page,
+			@RequestParam(value = "size", defaultValue = AppConstant.DEFAULT_PAGE_SIZE) Integer size){
+		PageResponse<BlogResponse> blogResponses = blogService.getBlogsByTag(tagId, page, size);
 		return new ResponseEntity<>(blogResponses,HttpStatus.OK);
+	}
+	
+	@PostMapping
+	public ResponseEntity<TagResponse> addTag(
+			@RequestBody TagRequest tagRequest){
+		TagResponse tagResponses = tagService.addTag(tagRequest);
+		return new ResponseEntity<>(tagResponses,HttpStatus.CREATED);
 	}
 	
 	

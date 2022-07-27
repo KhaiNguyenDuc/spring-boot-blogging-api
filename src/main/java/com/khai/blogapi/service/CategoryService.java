@@ -1,13 +1,15 @@
 package com.khai.blogapi.service;
 
-import java.util.List;
-
+import com.khai.blogapi.payload.CategoryRequest;
 import com.khai.blogapi.payload.CategoryResponse;
+import com.khai.blogapi.payload.PageResponse;
 
 public interface CategoryService {
 
-	List<CategoryResponse> getAllCategories();
+	PageResponse<CategoryResponse> getAllCategories(Integer page, Integer size);
 
 	CategoryResponse getCategoryById(Long categoryId);
+
+	CategoryResponse createCategory(CategoryRequest categoryRequest);
 
 }
