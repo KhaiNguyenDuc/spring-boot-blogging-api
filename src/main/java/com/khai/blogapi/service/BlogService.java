@@ -10,4 +10,8 @@ public interface BlogService {
 
 	BlogResponse getAllBlogs(Long blogId);
 
+	List<BlogResponse> getBlogsByCategory(Long categoryId);
+
+	List<BlogResponse> getBlogsByTag(Long tagId);
+
 }

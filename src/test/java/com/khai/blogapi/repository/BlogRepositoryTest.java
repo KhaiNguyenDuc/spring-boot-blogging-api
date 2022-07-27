@@ -67,7 +67,7 @@ class BlogRepositoryTest {
 		tagRequest2.setDescription("This is MKT Tag");
 		tagRequest2.setBlogs(null);
 
-		Tag tag2 = modelMapper.map(tagRequest, Tag.class);
+		Tag tag2 = modelMapper.map(tagRequest2, Tag.class);
 		tagRepository.save(tag2);
 
 		assertThat(tagRequest.equals(tag));

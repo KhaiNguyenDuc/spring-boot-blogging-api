@@ -10,4 +10,6 @@ public interface TagService {
 
 	TagResponse getTagById(Long tagId);
 
+	List<TagResponse> getTagsByBlog(Long blogId);
+
 }

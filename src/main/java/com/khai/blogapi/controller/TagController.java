@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.khai.blogapi.payload.BlogResponse;
 import com.khai.blogapi.payload.TagResponse;
+import com.khai.blogapi.service.BlogService;
 import com.khai.blogapi.service.TagService;
 
 @RestController
@@ -19,6 +21,9 @@ public class TagController {
 
 	@Autowired
 	TagService tagService;
+	
+	@Autowired
+	BlogService blogService;
 	
 	@GetMapping
 	public ResponseEntity<List<TagResponse>> getAllTags(){
@@ -32,4 +37,13 @@ public class TagController {
 		TagResponse tagResponses = tagService.getTagById(tagId);
 		return new ResponseEntity<>(tagResponses,HttpStatus.OK);
 	}
+	
+	@GetMapping("/{tag_id}/blogs")
+	public ResponseEntity<List<BlogResponse>> getBlogsByTag(
+			@PathVariable("tag_id") Long tagId){
+		List<BlogResponse> blogResponses = blogService.getBlogsByTag(tagId);
+		return new ResponseEntity<>(blogResponses,HttpStatus.OK);
+	}
+	
+	
 }

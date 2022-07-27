@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.khai.blogapi.payload.CommentResponse;
-import com.khai.blogapi.payload.TagResponse;
 import com.khai.blogapi.service.CommentService;
 
 @RestController

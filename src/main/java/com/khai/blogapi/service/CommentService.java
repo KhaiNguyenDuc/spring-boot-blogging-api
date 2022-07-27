@@ -10,4 +10,6 @@ public interface CommentService {
 
 	CommentResponse getCommentById(Long commentId);
 
+	List<CommentResponse> getCommentsByBlog(Long blogId);
+
 }
