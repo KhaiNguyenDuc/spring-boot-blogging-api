@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.khai.blogapi.model.Category;
 import com.khai.blogapi.model.Comment;
 import com.khai.blogapi.model.Tag;
@@ -34,7 +33,7 @@ public class BlogResponse {
 
 	private List<Comment> comments;
 
-	private Category category;
+	private Long categoryId;
 
 	private List<Tag> tags;
 
@@ -51,7 +50,6 @@ public class BlogResponse {
 
 	}
 
-	@JsonIgnore
 	public List<Tag> getTags() {
 		return tags == null ? null : new ArrayList<>(this.tags);
 	}

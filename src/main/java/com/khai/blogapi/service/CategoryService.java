@@ -8,4 +8,6 @@ public interface CategoryService {
 
 	List<CategoryResponse> getAllCategories();
 
+	CategoryResponse getCategoryById(Long categoryId);
+
 }
