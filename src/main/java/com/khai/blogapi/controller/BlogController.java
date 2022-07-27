@@ -1,17 +1,19 @@
 package com.khai.blogapi.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.khai.blogapi.payload.BlogRequest;
 import com.khai.blogapi.payload.BlogResponse;
+import com.khai.blogapi.payload.CommentRequest;
 import com.khai.blogapi.payload.CommentResponse;
 import com.khai.blogapi.payload.PageResponse;
 import com.khai.blogapi.payload.TagResponse;
@@ -67,4 +69,19 @@ public class BlogController {
 		return new ResponseEntity<>(tagResponses,HttpStatus.OK);
 	}
 	
+	@PostMapping("/{blog_id}/comments")
+	public ResponseEntity<CommentResponse> addComment(
+			@PathVariable("blog_id") Long blogId,
+			@RequestBody CommentRequest commentRequest){
+		CommentResponse commentResponses = 
+				commentService.addComment(commentRequest,blogId);
+		return new ResponseEntity<>(commentResponses,HttpStatus.CREATED);
+	}
+	
+	@PostMapping
+	public ResponseEntity<BlogResponse> addBlog(
+			@RequestBody BlogRequest blogRequest){
+		BlogResponse blogResponse = blogService.addBlog(blogRequest);
+		return new ResponseEntity<>(blogResponse,HttpStatus.CREATED);
+	}
 }

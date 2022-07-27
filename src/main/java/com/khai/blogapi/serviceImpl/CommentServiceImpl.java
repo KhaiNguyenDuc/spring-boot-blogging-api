@@ -1,6 +1,7 @@
 package com.khai.blogapi.serviceImpl;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
@@ -10,9 +11,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.khai.blogapi.exception.ResourceExistException;
 import com.khai.blogapi.exception.ResourceNotFoundException;
 import com.khai.blogapi.model.Blog;
 import com.khai.blogapi.model.Comment;
+import com.khai.blogapi.payload.CommentRequest;
 import com.khai.blogapi.payload.CommentResponse;
 import com.khai.blogapi.payload.PageResponse;
 import com.khai.blogapi.repository.BlogRepository;
@@ -26,21 +29,21 @@ public class CommentServiceImpl implements CommentService {
 
 	@Autowired
 	CommentRepository commentRepository;
-	
+
 	@Autowired
 	BlogRepository blogRepository;
-	
+
 	@Autowired
 	ModelMapper modelMapper;
-	
+
 	@Override
 	public PageResponse<CommentResponse> getAllComments(Integer page, Integer size) {
 		AppUtils.validatePageAndSize(page, size);
-		Pageable pageable = PageRequest.of(page,size);
+		Pageable pageable = PageRequest.of(page, size);
 		Page<Comment> comments = commentRepository.findAll(pageable);
-		List<CommentResponse> commentResponses = Arrays.asList(
-				modelMapper.map(comments.getContent(), CommentResponse[].class));
-		
+		List<CommentResponse> commentResponses = Arrays
+				.asList(modelMapper.map(comments.getContent(), CommentResponse[].class));
+
 		PageResponse<CommentResponse> pageResponse = new PageResponse<>();
 		pageResponse.setContent(commentResponses);
 		pageResponse.setSize(size);
@@ -48,15 +51,14 @@ public class CommentServiceImpl implements CommentService {
 		pageResponse.setTotalElements(comments.getNumberOfElements());
 		pageResponse.setTotalPages(comments.getTotalPages());
 		pageResponse.setLast(comments.isLast());
-		
+
 		return pageResponse;
 	}
 
 	@Override
 	public CommentResponse getCommentById(Long commentId) {
 		Comment comment = commentRepository.findById(commentId)
-				.orElseThrow(() -> new ResourceNotFoundException(
-						AppConstant.COMMENT_NOT_FOUND + commentId));
+				.orElseThrow(() -> new ResourceNotFoundException(AppConstant.COMMENT_NOT_FOUND + commentId));
 		return modelMapper.map(comment, CommentResponse.class);
 	}
 
@@ -65,13 +67,12 @@ public class CommentServiceImpl implements CommentService {
 		AppUtils.validatePageAndSize(page, size);
 		Pageable pageable = PageRequest.of(page, size);
 		Blog blog = blogRepository.findById(blogId)
-				.orElseThrow(() -> new ResourceNotFoundException(
-						AppConstant.BLOG_NOT_FOUND + blogId));
-		Page<Comment> comments = commentRepository.findByBlog(blog,pageable);
-		
-		List<CommentResponse> commentResponses = Arrays.asList(
-				modelMapper.map(comments.getContent(), CommentResponse[].class));
-		
+				.orElseThrow(() -> new ResourceNotFoundException(AppConstant.BLOG_NOT_FOUND + blogId));
+		Page<Comment> comments = commentRepository.findByBlog(blog, pageable);
+
+		List<CommentResponse> commentResponses = Arrays
+				.asList(modelMapper.map(comments.getContent(), CommentResponse[].class));
+
 		PageResponse<CommentResponse> pageResponse = new PageResponse<>();
 		pageResponse.setContent(commentResponses);
 		pageResponse.setSize(size);
@@ -79,8 +80,23 @@ public class CommentServiceImpl implements CommentService {
 		pageResponse.setTotalElements(comments.getNumberOfElements());
 		pageResponse.setTotalPages(comments.getTotalPages());
 		pageResponse.setLast(comments.isLast());
-		
+
 		return pageResponse;
+	}
+
+	@Override
+	public CommentResponse addComment(CommentRequest commentRequest, Long blogId) {
+		Comment comment = modelMapper.map(commentRequest, Comment.class);
+		
+		Blog blog = blogRepository.findById(blogId).orElseThrow(
+				() -> new ResourceNotFoundException(AppConstant.BLOG_NOT_FOUND + blogId));
+		
+		comment.setBlog(blog);
+		comment.setCreateDate(new Date());
+		
+		commentRepository.save(comment);
+		
+		return modelMapper.map(comment,CommentResponse.class);
 	}
 
 }

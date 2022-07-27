@@ -10,8 +10,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.khai.blogapi.exception.ResourceExistException;
 import com.khai.blogapi.exception.ResourceNotFoundException;
 import com.khai.blogapi.model.Category;
+import com.khai.blogapi.payload.CategoryRequest;
 import com.khai.blogapi.payload.CategoryResponse;
 import com.khai.blogapi.payload.PageResponse;
 import com.khai.blogapi.repository.CategoryRepository;
@@ -54,5 +56,19 @@ public class CategoryServiceImpl implements CategoryService {
 				.orElseThrow(() -> new ResourceNotFoundException(AppConstant.CATEGORY_NOT_FOUND + categoryId));
 
 		return modelMapper.map(category, CategoryResponse.class);
+	}
+
+	@Override
+	public CategoryResponse createCategory(CategoryRequest categoryRequest) {
+		
+		Category category = modelMapper.map(categoryRequest, Category.class);
+		if(categoryRepository.findByName(category.getName()).isPresent()) {
+			throw new ResourceExistException(AppConstant.CATEGORY_EXIST);
+		}
+		
+		categoryRepository.save(category) ;
+		
+		return modelMapper.map(category, CategoryResponse.class);
+		
 	}
 }

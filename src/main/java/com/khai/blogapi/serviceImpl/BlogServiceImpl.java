@@ -14,6 +14,7 @@ import com.khai.blogapi.exception.ResourceNotFoundException;
 import com.khai.blogapi.model.Blog;
 import com.khai.blogapi.model.Category;
 import com.khai.blogapi.model.Tag;
+import com.khai.blogapi.payload.BlogRequest;
 import com.khai.blogapi.payload.BlogResponse;
 import com.khai.blogapi.payload.PageResponse;
 import com.khai.blogapi.repository.BlogRepository;
@@ -108,6 +109,12 @@ public class BlogServiceImpl implements BlogService{
 		pageResponse.setLast(blogs.isLast());
 		
 		return pageResponse;
+	}
+
+	@Override
+	public BlogResponse addBlog(BlogRequest blogRequest) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 

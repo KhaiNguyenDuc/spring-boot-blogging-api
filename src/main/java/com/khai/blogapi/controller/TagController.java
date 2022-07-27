@@ -5,12 +5,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.khai.blogapi.payload.BlogResponse;
 import com.khai.blogapi.payload.PageResponse;
+import com.khai.blogapi.payload.TagRequest;
 import com.khai.blogapi.payload.TagResponse;
 import com.khai.blogapi.service.BlogService;
 import com.khai.blogapi.service.TagService;
@@ -48,6 +51,13 @@ public class TagController {
 			@RequestParam(value = "size", defaultValue = AppConstant.DEFAULT_PAGE_SIZE) Integer size){
 		PageResponse<BlogResponse> blogResponses = blogService.getBlogsByTag(tagId, page, size);
 		return new ResponseEntity<>(blogResponses,HttpStatus.OK);
+	}
+	
+	@PostMapping
+	public ResponseEntity<TagResponse> addTag(
+			@RequestBody TagRequest tagRequest){
+		TagResponse tagResponses = tagService.addTag(tagRequest);
+		return new ResponseEntity<>(tagResponses,HttpStatus.CREATED);
 	}
 	
 	

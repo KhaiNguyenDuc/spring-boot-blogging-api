@@ -10,10 +10,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.khai.blogapi.exception.ResourceExistException;
 import com.khai.blogapi.exception.ResourceNotFoundException;
 import com.khai.blogapi.model.Blog;
 import com.khai.blogapi.model.Tag;
 import com.khai.blogapi.payload.PageResponse;
+import com.khai.blogapi.payload.TagRequest;
 import com.khai.blogapi.payload.TagResponse;
 import com.khai.blogapi.repository.BlogRepository;
 import com.khai.blogapi.repository.TagRepository;
@@ -83,5 +85,16 @@ public class TagServiceImpl implements TagService {
 				.orElseThrow(() -> new ResourceNotFoundException(
 						AppConstant.TAG_NOT_FOUND + tagId));
 		return modelMapper.map(tag, TagResponse.class);
+	}
+
+	@Override
+	public TagResponse addTag(TagRequest tagRequest) {
+		Tag tag = modelMapper.map(tagRequest,Tag.class);
+		if(tagRepository.findByName(tag.getName()).isPresent()) {
+			throw new ResourceExistException(AppConstant.TAG_EXIST);
+		}
+		tagRepository.save(tag);
+		
+		return modelMapper.map(tag,TagResponse.class);
 	}
 }

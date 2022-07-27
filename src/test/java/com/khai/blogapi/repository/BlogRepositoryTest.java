@@ -135,30 +135,30 @@ class BlogRepositoryTest {
 
 		// create comment and add blog
 		CommentRequest commentRequest = new CommentRequest();
-		commentRequest.setId(1L);
-		commentRequest.setLastUpdate(null);
-		commentRequest.setCreateDate(new Date());
+		
 		commentRequest.setTitle("This is title");
 		commentRequest.setBody("This is body");
-		commentRequest.setBlog(blog);
+		
 
 		Comment comment = modelMapper.map(commentRequest, Comment.class);
-
+		comment.setLastUpdate(null);
+		comment.setCreateDate(new Date());
+		comment.setBlog(blog);
 		commentRepository.save(comment);
 
 		// get blog with id 1
 
 		// create comment and add blog
 		CommentRequest commentRequest2 = new CommentRequest();
-		commentRequest2.setId(2L);
-		commentRequest2.setLastUpdate(null);
-		commentRequest2.setCreateDate(new Date());
+		
 		commentRequest2.setTitle("This is title 2");
 		commentRequest2.setBody("This is body 2");
-		commentRequest2.setBlog(blog);
+		
 
 		Comment comment2 = modelMapper.map(commentRequest2, Comment.class);
-
+		comment2.setLastUpdate(null);
+		comment2.setCreateDate(new Date());
+		comment2.setBlog(blog);
 		commentRepository.save(comment2);
 
 		assertThat(comment.equals(commentRequest));
