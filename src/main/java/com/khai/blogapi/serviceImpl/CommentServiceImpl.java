@@ -5,16 +5,21 @@ import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.khai.blogapi.exception.ResourceNotFoundException;
 import com.khai.blogapi.model.Blog;
 import com.khai.blogapi.model.Comment;
 import com.khai.blogapi.payload.CommentResponse;
+import com.khai.blogapi.payload.PageResponse;
 import com.khai.blogapi.repository.BlogRepository;
 import com.khai.blogapi.repository.CommentRepository;
 import com.khai.blogapi.service.CommentService;
 import com.khai.blogapi.utils.AppConstant;
+import com.khai.blogapi.utils.AppUtils;
 
 @Service
 public class CommentServiceImpl implements CommentService {
@@ -29,9 +34,22 @@ public class CommentServiceImpl implements CommentService {
 	ModelMapper modelMapper;
 	
 	@Override
-	public List<CommentResponse> getAllComments() {
-		List<Comment> comments = commentRepository.findAll();
-		return Arrays.asList(modelMapper.map(comments, CommentResponse[].class));
+	public PageResponse<CommentResponse> getAllComments(Integer page, Integer size) {
+		AppUtils.validatePageAndSize(page, size);
+		Pageable pageable = PageRequest.of(page,size);
+		Page<Comment> comments = commentRepository.findAll(pageable);
+		List<CommentResponse> commentResponses = Arrays.asList(
+				modelMapper.map(comments.getContent(), CommentResponse[].class));
+		
+		PageResponse<CommentResponse> pageResponse = new PageResponse<>();
+		pageResponse.setContent(commentResponses);
+		pageResponse.setSize(size);
+		pageResponse.setPage(page);
+		pageResponse.setTotalElements(comments.getNumberOfElements());
+		pageResponse.setTotalPages(comments.getTotalPages());
+		pageResponse.setLast(comments.isLast());
+		
+		return pageResponse;
 	}
 
 	@Override
@@ -43,14 +61,26 @@ public class CommentServiceImpl implements CommentService {
 	}
 
 	@Override
-	public List<CommentResponse> getCommentsByBlog(Long blogId) {
+	public PageResponse<CommentResponse> getCommentsByBlog(Long blogId, Integer page, Integer size) {
+		AppUtils.validatePageAndSize(page, size);
+		Pageable pageable = PageRequest.of(page, size);
 		Blog blog = blogRepository.findById(blogId)
 				.orElseThrow(() -> new ResourceNotFoundException(
 						AppConstant.BLOG_NOT_FOUND + blogId));
-		List<Comment> comments = commentRepository.findByBlog(blog);
+		Page<Comment> comments = commentRepository.findByBlog(blog,pageable);
 		
-		return Arrays.asList(
-				modelMapper.map(comments, CommentResponse[].class));
+		List<CommentResponse> commentResponses = Arrays.asList(
+				modelMapper.map(comments.getContent(), CommentResponse[].class));
+		
+		PageResponse<CommentResponse> pageResponse = new PageResponse<>();
+		pageResponse.setContent(commentResponses);
+		pageResponse.setSize(size);
+		pageResponse.setPage(page);
+		pageResponse.setTotalElements(comments.getNumberOfElements());
+		pageResponse.setTotalPages(comments.getTotalPages());
+		pageResponse.setLast(comments.isLast());
+		
+		return pageResponse;
 	}
 
 }
