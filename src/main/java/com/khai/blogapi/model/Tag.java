@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
@@ -35,7 +37,13 @@ public class Tag {
 	@Column(name = "description")
 	private String description;
 	
-	@ManyToMany(mappedBy = "tags")
+	@ManyToMany
+	@JsonIgnore
+	@JoinTable(
+			name = "blog_tag",
+			joinColumns = @JoinColumn(name = "tag_id"),
+			inverseJoinColumns = @JoinColumn(name = "blog_id")
+			)
 	private List<Blog> blogs;
 
 	
@@ -50,6 +58,11 @@ public class Tag {
 		}else {
 			this.blogs = blogs;
 		}
+	}
+	
+	public void removeBlog(Blog blog) {
+		this.getBlogs().remove(blog);
+		blog.setTags(null);
 	}
 	
 	

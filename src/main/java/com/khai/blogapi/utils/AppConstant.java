@@ -11,9 +11,14 @@ public class AppConstant {
 	public static final String BLOG_EXIST = "This blog already exist in database";
 	public static final String TAG_EXIST = "This tag already exist in database";
 	public static final String COMMENT_EXIST = "This comment already exist in database with id: ";
-
+	public static final String TAG_ID_EXIST = "This id is already exist in database (recomment not to pass id in json )";
 	
 	public static final String DEFAULT_PAGE_NUMBER = "0";
 	public static final String DEFAULT_PAGE_SIZE = "1"; 
 	public static final Integer MAX_PAGE_SIZE = 10;
+	
+	public static final String CATEGORY_DELETE_MESSAGE = "Sucessfully delete";
+	public static final String COMMENT_DELETE_MESSAGE = "Sucessfully delete";
+	public static final String TAG_DELETE_MESSAGE = "Sucessfully delete";
+	public static final String BLOG_DELETE_MESSAGE = "Sucessfully delete";
 }

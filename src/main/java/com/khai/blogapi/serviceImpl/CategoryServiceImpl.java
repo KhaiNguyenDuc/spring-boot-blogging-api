@@ -8,11 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.khai.blogapi.exception.ResourceExistException;
 import com.khai.blogapi.exception.ResourceNotFoundException;
 import com.khai.blogapi.model.Category;
+import com.khai.blogapi.payload.ApiResponse;
 import com.khai.blogapi.payload.CategoryRequest;
 import com.khai.blogapi.payload.CategoryResponse;
 import com.khai.blogapi.payload.PageResponse;
@@ -71,4 +73,36 @@ public class CategoryServiceImpl implements CategoryService {
 		return modelMapper.map(category, CategoryResponse.class);
 		
 	}
+
+	@Override
+	public ApiResponse deleteCategoryById(Long categoryId) {
+		Category category = categoryRepository.findById(categoryId)
+				.orElseThrow(() -> new ResourceNotFoundException(AppConstant.CATEGORY_NOT_FOUND + categoryId));
+		categoryRepository.delete(category);
+		return new ApiResponse(Boolean.TRUE,
+				AppConstant.CATEGORY_DELETE_MESSAGE,HttpStatus.OK);
+	}
+
+	@Override
+	public ApiResponse deleteAll() {
+		categoryRepository.deleteAll();
+		return new ApiResponse(Boolean.TRUE,
+				AppConstant.CATEGORY_DELETE_MESSAGE,HttpStatus.OK);
+	}
+
+	@Override
+	public CategoryResponse updateCategoryById(Long categoryId, CategoryRequest categoryRequest) {
+		
+		Category category = categoryRepository.findById(categoryId)
+				.orElseThrow(() -> new ResourceNotFoundException(
+						AppConstant.CATEGORY_NOT_FOUND + categoryId));
+		
+		modelMapper.map(categoryRequest,category);
+		
+		categoryRepository.save(category);
+		
+		return modelMapper.map(category,CategoryResponse.class);
+	}
+
+	
 }

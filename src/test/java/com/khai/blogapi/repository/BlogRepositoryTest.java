@@ -52,7 +52,6 @@ class BlogRepositoryTest {
 	void testCreateTag() {
 		// create a tag
 		TagRequest tagRequest = new TagRequest();
-		tagRequest.setId(1L);
 		tagRequest.setName("IT");
 		tagRequest.setDescription("This is tag");
 		tagRequest.setBlogs(null);
@@ -62,7 +61,6 @@ class BlogRepositoryTest {
 
 		// 2nd tag
 		TagRequest tagRequest2 = new TagRequest();
-		tagRequest2.setId(2L);
 		tagRequest2.setName("MKT");
 		tagRequest2.setDescription("This is MKT Tag");
 		tagRequest2.setBlogs(null);
@@ -81,11 +79,9 @@ class BlogRepositoryTest {
 		// create category request
 		CategoryRequest categoryRequest = new CategoryRequest();
 
-		categoryRequest.setId(1L);
 		categoryRequest.setName("Spring boot rest api");
 		categoryRequest.setTitle("This is title for spring boot rest api");
 		categoryRequest.setDescription("Description");
-		categoryRequest.setBlogs(null);
 
 		// map categoryRequest with category model
 		Category cate = modelMapper.map(categoryRequest, Category.class);
@@ -100,26 +96,23 @@ class BlogRepositoryTest {
 	@Order(3)
 	void testCreateBlog() {
 
-		Category category = categoryRepository.findById(1L).get();
 		List<Tag> tags = tagRepository.findAll();
 
 		BlogRequest blogRequest = new BlogRequest();
 
-		blogRequest.setId(1L);
 		blogRequest.setImage("Image link");
 		blogRequest.setBody("Body");
 		blogRequest.setLastUpdate(null);
-		blogRequest.setComments(null);
 		blogRequest.setCreateDate(new Date());
 		blogRequest.setPublished(true);
 		blogRequest.setDescription("This is description");
-		blogRequest.setTags(tags);
 		blogRequest.setTitle("This is title");
 		blogRequest.setViews(1L);
-		blogRequest.setCategory(category);
+		blogRequest.setCategoryId(1L);
 
 		Blog blog = modelMapper.map(blogRequest, Blog.class);
 
+		blog.setTags(tags);
 		blogRepository.save(blog);
 
 		assertThat(blog.equals(blogRequest));
