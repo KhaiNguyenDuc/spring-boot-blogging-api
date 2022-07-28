@@ -3,6 +3,7 @@ package com.khai.blogapi.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.khai.blogapi.payload.ApiResponse;
 import com.khai.blogapi.payload.BlogRequest;
 import com.khai.blogapi.payload.BlogResponse;
 import com.khai.blogapi.payload.CommentRequest;
@@ -83,5 +85,26 @@ public class BlogController {
 			@RequestBody BlogRequest blogRequest){
 		BlogResponse blogResponse = blogService.addBlog(blogRequest);
 		return new ResponseEntity<>(blogResponse,HttpStatus.CREATED);
+	}
+	
+	@DeleteMapping("/{blog_id}")
+	public ResponseEntity<ApiResponse> deleteBlogById(
+			@PathVariable("blog_id") Long blogId){
+		ApiResponse response = blogService.deleteBlogById(blogId);
+		return new ResponseEntity<>(response,HttpStatus.OK);
+	}
+	
+	@DeleteMapping("/{blog_id}/comments")
+	public ResponseEntity<ApiResponse> deleteCommentsByBlog(
+			@PathVariable("blog_id") Long blogId){
+		ApiResponse response = commentService.deleteCommentsByBlog(blogId);
+		return new ResponseEntity<>(response,HttpStatus.OK);
+	}
+	
+	@DeleteMapping("/{blog_id}/tags")
+	public ResponseEntity<ApiResponse> removeTagsByBlog(
+			@PathVariable("blog_id") Long blogId){
+		ApiResponse response = tagService.removeTagsByBlog(blogId);
+		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 }

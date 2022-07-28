@@ -1,5 +1,6 @@
 package com.khai.blogapi.service;
 
+import com.khai.blogapi.payload.ApiResponse;
 import com.khai.blogapi.payload.PageResponse;
 import com.khai.blogapi.payload.TagRequest;
 import com.khai.blogapi.payload.TagResponse;
@@ -13,5 +14,13 @@ public interface TagService {
 	PageResponse<TagResponse> getAllTags(Integer page, Integer size);
 
 	TagResponse addTag(TagRequest tagRequest);
+
+	ApiResponse deleteTagById(Long tagId);
+
+	ApiResponse deleteAllTag();
+
+	ApiResponse removeTagsByBlog(Long blogId);
+
+	TagResponse updateTagById(Long tagId, TagRequest tagRequest);
 
 }

@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.khai.blogapi.model.Category;
 import com.khai.blogapi.model.Comment;
 import com.khai.blogapi.model.Tag;
 
@@ -13,8 +11,6 @@ import lombok.Data;
 
 @Data
 public class BlogRequest {
-	
-	private Long id;
 	
 	private String title;
 
@@ -34,7 +30,7 @@ public class BlogRequest {
 	
 	private List<Comment> comments;
 	
-	private Category category;
+	private Long categoryId;
 	
 	private List<Tag> tags;
 

@@ -3,14 +3,17 @@ package com.khai.blogapi.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.khai.blogapi.payload.ApiResponse;
 import com.khai.blogapi.payload.BlogResponse;
 import com.khai.blogapi.payload.PageResponse;
 import com.khai.blogapi.payload.TagRequest;
@@ -58,6 +61,27 @@ public class TagController {
 			@RequestBody TagRequest tagRequest){
 		TagResponse tagResponses = tagService.addTag(tagRequest);
 		return new ResponseEntity<>(tagResponses,HttpStatus.CREATED);
+	}
+	
+	@DeleteMapping
+	public ResponseEntity<ApiResponse> deleteAllTag(){
+		ApiResponse responses = tagService.deleteAllTag();
+		return new ResponseEntity<>(responses,HttpStatus.OK);
+	} 
+	
+	@DeleteMapping("/{tag_id}")
+	public ResponseEntity<ApiResponse> deleteTagById(
+			@PathVariable("tag_id") Long tagId){
+		ApiResponse response = tagService.deleteTagById(tagId);
+		return new ResponseEntity<>(response,HttpStatus.OK);
+	}
+	
+	@PutMapping("/{tag_id}")
+	public ResponseEntity<TagResponse> updateTagById(
+			@PathVariable("tag_id") Long tagId,
+			@RequestBody TagRequest tagRequest){
+		TagResponse tagResponses = tagService.updateTagById(tagId,tagRequest);
+		return new ResponseEntity<>(tagResponses,HttpStatus.OK);
 	}
 	
 	

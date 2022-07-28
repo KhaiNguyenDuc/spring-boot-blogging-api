@@ -3,14 +3,17 @@ package com.khai.blogapi.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.khai.blogapi.payload.ApiResponse;
 import com.khai.blogapi.payload.CommentRequest;
 import com.khai.blogapi.payload.CommentResponse;
 import com.khai.blogapi.payload.PageResponse;
@@ -39,6 +42,23 @@ public class CommentController {
 		CommentResponse commentResponses = commentService.getCommentById(commentId);
 		return new ResponseEntity<>(commentResponses,HttpStatus.OK);
 	}
+	
+	@DeleteMapping("/{comment_id}")
+	public ResponseEntity<ApiResponse> deleteCommentById(
+			@PathVariable("comment_id") Long commentId){
+		ApiResponse response = commentService.deleteById(commentId);
+		return new ResponseEntity<>(response,HttpStatus.OK);
+	}
+	
+	@PutMapping("/{comment_id}")
+	public ResponseEntity<CommentResponse> updateCommentById(
+			@PathVariable("comment_id") Long commentId,
+			@RequestBody CommentRequest commentRequest){
+		CommentResponse commentResponses = commentService.updateCommentById(commentId,commentRequest);
+		return new ResponseEntity<>(commentResponses,HttpStatus.OK);
+	}
+	
+	
 	
 	
 }

@@ -12,7 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -43,6 +44,6 @@ public class Comment {
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "blog_id", referencedColumnName = "id")
-	@JsonIgnore
+	@JsonProperty(access = Access.WRITE_ONLY)
 	private Blog blog;
 }

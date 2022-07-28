@@ -9,12 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import com.khai.blogapi.exception.ResourceExistException;
 import com.khai.blogapi.exception.ResourceNotFoundException;
 import com.khai.blogapi.model.Blog;
 import com.khai.blogapi.model.Comment;
+import com.khai.blogapi.payload.ApiResponse;
+import com.khai.blogapi.payload.BlogRequest;
 import com.khai.blogapi.payload.CommentRequest;
 import com.khai.blogapi.payload.CommentResponse;
 import com.khai.blogapi.payload.PageResponse;
@@ -94,6 +96,40 @@ public class CommentServiceImpl implements CommentService {
 		comment.setBlog(blog);
 		comment.setCreateDate(new Date());
 		
+		commentRepository.save(comment);
+		
+		return modelMapper.map(comment,CommentResponse.class);
+	}
+
+	@Override
+	public ApiResponse deleteById(Long commentId) {
+		Comment comment = commentRepository.findById(commentId)
+				.orElseThrow(() -> new ResourceNotFoundException(
+						AppConstant.COMMENT_NOT_FOUND + commentId));
+		commentRepository.delete(comment);
+		return new ApiResponse(Boolean.TRUE,AppConstant.COMMENT_DELETE_MESSAGE,HttpStatus.OK);
+	}
+	
+	@Override
+	public ApiResponse deleteCommentsByBlog(Long blogId) {
+		Blog blog = blogRepository.findById(blogId)
+				.orElseThrow(() -> new ResourceNotFoundException(
+						AppConstant.COMMENT_DELETE_MESSAGE));
+		commentRepository.deleteAllByBlog(blog);
+		
+		return new ApiResponse(Boolean.TRUE,AppConstant.COMMENT_DELETE_MESSAGE,HttpStatus.OK);
+	}
+
+	@Override
+	public CommentResponse updateCommentById(Long commentId, CommentRequest commentRequest) {
+		
+		
+		Comment comment = commentRepository.findById(commentId)
+				.orElseThrow(() -> new ResourceNotFoundException(
+						AppConstant.COMMENT_NOT_FOUND+commentId));
+		
+		modelMapper.map(commentRequest,comment);
+
 		commentRepository.save(comment);
 		
 		return modelMapper.map(comment,CommentResponse.class);

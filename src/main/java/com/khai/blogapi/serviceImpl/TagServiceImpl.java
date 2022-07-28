@@ -8,12 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.khai.blogapi.exception.ResourceExistException;
 import com.khai.blogapi.exception.ResourceNotFoundException;
 import com.khai.blogapi.model.Blog;
 import com.khai.blogapi.model.Tag;
+import com.khai.blogapi.payload.ApiResponse;
 import com.khai.blogapi.payload.PageResponse;
 import com.khai.blogapi.payload.TagRequest;
 import com.khai.blogapi.payload.TagResponse;
@@ -96,5 +98,51 @@ public class TagServiceImpl implements TagService {
 		tagRepository.save(tag);
 		
 		return modelMapper.map(tag,TagResponse.class);
+	}
+
+	@Override
+	public ApiResponse deleteTagById(Long tagId) {
+		Tag tag = tagRepository.findById(tagId)
+				.orElseThrow(() -> new ResourceNotFoundException(
+						AppConstant.TAG_NOT_FOUND + tagId));
+
+		tagRepository.delete(tag);
+		return new ApiResponse(Boolean.TRUE,AppConstant.TAG_DELETE_MESSAGE,HttpStatus.OK);
+	}
+
+	@Override
+	public ApiResponse deleteAllTag() {
+		tagRepository.deleteAll();
+		return new ApiResponse(Boolean.TRUE,AppConstant.TAG_DELETE_MESSAGE,HttpStatus.OK);
+	}
+
+	@Override
+	public ApiResponse removeTagsByBlog(Long blogId) {
+		Blog blog = blogRepository.findById(blogId)
+				.orElseThrow(() -> new ResourceNotFoundException(
+						AppConstant.BLOG_NOT_FOUND + blogId));
+		
+		List<Tag> tags = tagRepository.findAllByBlogs(blog);
+		for (Tag tag : tags) {
+			tag.removeBlog(blog);
+		}
+		
+		tagRepository.saveAll(tags);
+		return new ApiResponse(Boolean.TRUE,AppConstant.TAG_DELETE_MESSAGE,HttpStatus.OK);
+	}
+
+	@Override
+	public TagResponse updateTagById(Long tagId, TagRequest tagRequest) {
+		Tag tag = tagRepository.findById(tagId)
+				.orElseThrow(() -> new ResourceNotFoundException(
+						AppConstant.TAG_NOT_FOUND+ tagId));
+		System.out.println(tag.getName());
+		modelMapper.map(tagRequest, tag);
+		
+		System.out.println(tag.getName());
+		tagRepository.save(tag);
+		
+		
+		return modelMapper.map(tag, TagResponse.class);
 	}
 }
