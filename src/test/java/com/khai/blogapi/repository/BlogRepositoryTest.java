@@ -82,7 +82,6 @@ class BlogRepositoryTest {
 		categoryRequest.setName("Spring boot rest api");
 		categoryRequest.setTitle("This is title for spring boot rest api");
 		categoryRequest.setDescription("Description");
-		categoryRequest.setBlogs(null);
 
 		// map categoryRequest with category model
 		Category cate = modelMapper.map(categoryRequest, Category.class);
@@ -104,17 +103,16 @@ class BlogRepositoryTest {
 		blogRequest.setImage("Image link");
 		blogRequest.setBody("Body");
 		blogRequest.setLastUpdate(null);
-		blogRequest.setComments(null);
 		blogRequest.setCreateDate(new Date());
 		blogRequest.setPublished(true);
 		blogRequest.setDescription("This is description");
-		blogRequest.setTags(tags);
 		blogRequest.setTitle("This is title");
 		blogRequest.setViews(1L);
 		blogRequest.setCategoryId(1L);
 
 		Blog blog = modelMapper.map(blogRequest, Blog.class);
 
+		blog.setTags(tags);
 		blogRepository.save(blog);
 
 		assertThat(blog.equals(blogRequest));

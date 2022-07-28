@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.khai.blogapi.model.Category;
 import com.khai.blogapi.model.Comment;
 import com.khai.blogapi.model.Tag;
 

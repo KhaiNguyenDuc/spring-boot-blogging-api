@@ -21,5 +21,7 @@ public interface BlogService {
 
 	ApiResponse deleteBlogsByCategory(Long categoryId);
 
+	BlogResponse updateBlogById(Long blogId, BlogRequest blogRequest);
+
 
 }

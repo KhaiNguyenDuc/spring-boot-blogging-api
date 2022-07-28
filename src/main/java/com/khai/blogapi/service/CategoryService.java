@@ -17,6 +17,8 @@ public interface CategoryService {
 
 	ApiResponse deleteAll();
 
+	CategoryResponse updateCategoryById(Long categoryId, CategoryRequest categoryRequest);
+
 	
 
 }

@@ -16,7 +16,6 @@ import com.khai.blogapi.exception.ResourceNotFoundException;
 import com.khai.blogapi.model.Blog;
 import com.khai.blogapi.model.Comment;
 import com.khai.blogapi.payload.ApiResponse;
-import com.khai.blogapi.payload.BlogRequest;
 import com.khai.blogapi.payload.CommentRequest;
 import com.khai.blogapi.payload.CommentResponse;
 import com.khai.blogapi.payload.PageResponse;

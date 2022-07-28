@@ -183,5 +183,35 @@ public class BlogServiceImpl implements BlogService{
 		return new ApiResponse(Boolean.TRUE,AppConstant.BLOG_DELETE_MESSAGE,HttpStatus.OK);
 	}
 
+	@Override
+	public BlogResponse updateBlogById(Long blogId, BlogRequest blogRequest) {
+		
+		modelMapper.typeMap(BlogRequest.class,Blog.class)
+		.addMappings(mapper -> mapper.skip(Blog::setId));
+		
+		Blog blog = blogRepository.findById(blogId)
+				.orElseThrow(() -> new ResourceNotFoundException(
+						AppConstant.BLOG_NOT_FOUND + blogId));
+		
+		Long categoryId = blogRequest.getCategoryId();
+		
+		Category category = categoryRepository.findById(categoryId)
+				.orElseThrow(() -> 
+				new ResourceNotFoundException(AppConstant.CATEGORY_NOT_FOUND + categoryId));
+		
+		blog.setBody(blogRequest.getBody());
+		blog.setCreateDate(blogRequest.getCreateDate());
+		blog.setDescription(blogRequest.getDescription());
+		blog.setImage(blogRequest.getImage());
+		blog.setLastUpdate(blogRequest.getLastUpdate());
+		blog.setPublished(blogRequest.getPublished());
+		blog.setTitle(blogRequest.getTitle());
+		blog.setViews(blogRequest.getViews());
+		blog.setCategory(category);
+		
+		blogRepository.save(blog);
+		return modelMapper.map(blog,BlogResponse.class);
+	}
+
 	
 }

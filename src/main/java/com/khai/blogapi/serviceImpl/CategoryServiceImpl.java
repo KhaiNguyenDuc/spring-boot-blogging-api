@@ -90,5 +90,19 @@ public class CategoryServiceImpl implements CategoryService {
 				AppConstant.CATEGORY_DELETE_MESSAGE,HttpStatus.OK);
 	}
 
+	@Override
+	public CategoryResponse updateCategoryById(Long categoryId, CategoryRequest categoryRequest) {
+		
+		Category category = categoryRepository.findById(categoryId)
+				.orElseThrow(() -> new ResourceNotFoundException(
+						AppConstant.CATEGORY_NOT_FOUND + categoryId));
+		
+		modelMapper.map(categoryRequest,category);
+		
+		categoryRepository.save(category);
+		
+		return modelMapper.map(category,CategoryResponse.class);
+	}
+
 	
 }
