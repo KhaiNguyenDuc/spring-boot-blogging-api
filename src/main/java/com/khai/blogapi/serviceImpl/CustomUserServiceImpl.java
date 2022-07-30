@@ -8,13 +8,14 @@ import org.springframework.stereotype.Service;
 
 import com.khai.blogapi.exception.UserNotFoundException;
 import com.khai.blogapi.model.User;
+import com.khai.blogapi.payload.UserResponse;
 import com.khai.blogapi.repository.UserRepository;
 import com.khai.blogapi.security.UserPrincipal;
 import com.khai.blogapi.service.UserService;
 import com.khai.blogapi.utils.AppConstant;
 
 @Service
-public class CustomUserServiceImpl implements UserService, UserDetailsService {
+public class CustomUserServiceImpl implements UserDetailsService {
 
 	@Autowired
 	UserRepository userRepository;
@@ -27,5 +28,7 @@ public class CustomUserServiceImpl implements UserService, UserDetailsService {
 		return UserPrincipal.create(user);
 
 	}
+
+	
 
 }

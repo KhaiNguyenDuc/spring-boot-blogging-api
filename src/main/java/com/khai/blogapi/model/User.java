@@ -17,8 +17,11 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.Email;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -46,13 +49,14 @@ public class User {
 	private String lastName;
 	
 	@Column(name = "email")
+	@Email
 	private String email;
 
 	@Column(name = "phoneNumber")
 	private String phoneNumber;
 
 	@Column(name = "password")
-	@JsonIgnore
+	@JsonProperty(access = Access.WRITE_ONLY)
 	private String password;
 
 	@Column(name = "address")

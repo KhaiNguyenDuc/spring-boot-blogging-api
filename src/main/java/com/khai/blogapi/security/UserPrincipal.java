@@ -14,6 +14,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import com.khai.blogapi.model.Role;
 import com.khai.blogapi.model.User;
 
+import lombok.Data;
+
+@Data
 public class UserPrincipal implements UserDetails {
 
 	private static final long serialVersionUID = 1L;
@@ -24,19 +27,22 @@ public class UserPrincipal implements UserDetails {
 	private String lastName;
 	private String email;
 	private String password;
+	private String phoneNumber;
+	private String image;
 	private Boolean enabled;
+	
 	private List<GrantedAuthority> authorities;
 
-	
-
 	public UserPrincipal(Long id, String username, String firstName, String lastName, String email, String password,
-			Boolean enabled, List<GrantedAuthority> authorities) {
+			String phoneNumber, String image, Boolean enabled, List<GrantedAuthority> authorities) {
 		this.id = id;
 		this.username = username;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
 		this.password = password;
+		this.phoneNumber = phoneNumber;
+		this.image = image;
 		this.enabled = enabled;
 		
 		if (authorities == null) {
@@ -44,12 +50,13 @@ public class UserPrincipal implements UserDetails {
 		} else {
 			this.authorities = new ArrayList<>(authorities);
 		}
+		
+		
 	}
 
 	public static UserPrincipal create(User user) {
 		
 		List<GrantedAuthority> authorities = new ArrayList<>();
-		System.out.println(user.getRoles().get(0).getName());
 		for(Role r : user.getRoles()) {
 			authorities.add(new SimpleGrantedAuthority("ROLE_"+r.getName()));
 		}
@@ -60,6 +67,8 @@ public class UserPrincipal implements UserDetails {
 								user.getLastName(),
 								user.getEmail(),
 								user.getPassword(),
+								user.getPhoneNumber(),
+								user.getImage(),
 								user.isEnabled(),
 								authorities);
 								
@@ -67,7 +76,6 @@ public class UserPrincipal implements UserDetails {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-
 		return authorities == null ? null : new ArrayList<>(this.authorities);
 	}
 
@@ -81,13 +89,6 @@ public class UserPrincipal implements UserDetails {
 		return this.username;
 	}
 
-	public String getEmail() {
-		return this.email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
 
 	@Override
 	public boolean isAccountNonExpired() {
@@ -113,22 +114,8 @@ public class UserPrincipal implements UserDetails {
 		return new BCryptPasswordEncoder();
 	}
 
-	public String getFirstName() {
-		return firstName;
-	}
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-	
+	@Override
 	public boolean equals(Object object) {
 		if (this == object)
 			return true;
@@ -138,9 +125,13 @@ public class UserPrincipal implements UserDetails {
 		return Objects.equals(id, that.id);
 	}
 
+	@Override
 	public int hashCode() {
 		return Objects.hash(id);
 	}
+
+	
+	
 	
 	
 

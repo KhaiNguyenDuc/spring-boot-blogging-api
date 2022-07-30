@@ -18,8 +18,11 @@ public class AppConstant {
 	public static final String DEFAULT_PAGE_SIZE = "1"; 
 	public static final Integer MAX_PAGE_SIZE = 10;
 	
-	public static final String CATEGORY_DELETE_MESSAGE = "Sucessfully delete";
-	public static final String COMMENT_DELETE_MESSAGE = "Sucessfully delete";
-	public static final String TAG_DELETE_MESSAGE = "Sucessfully delete";
-	public static final String BLOG_DELETE_MESSAGE = "Sucessfully delete";
+	public static final String CATEGORY_DELETE_MESSAGE = "Sucessfully delete this category";
+	public static final String COMMENT_DELETE_MESSAGE = "Sucessfully delete this comment";
+	public static final String TAG_DELETE_MESSAGE = "Sucessfully delete this tag";
+	public static final String BLOG_DELETE_MESSAGE = "Sucessfully delete this blog";
+	public static final String USER_DELETE_MESSAGE = "Sucessfully delete this user";
+
+	public static final String USER_UPDATE_DENY = "You don't have permission to update this user";
 }

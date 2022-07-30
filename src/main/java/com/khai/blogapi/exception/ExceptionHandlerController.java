@@ -51,5 +51,15 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
 				request.getDescription(false));
 		return new ResponseEntity<>(details,HttpStatus.NOT_FOUND);
 	}
+	
+	@ExceptionHandler(UnauthorizedException.class)
+	public ResponseEntity<ExceptionDetails> unauthorized(
+			UnauthorizedException e, WebRequest request){
+		ExceptionDetails details = new ExceptionDetails(
+				new Date(),
+				e.getMessage(),
+				request.getDescription(false));
+		return new ResponseEntity<>(details,HttpStatus.UNAUTHORIZED);
+	}
 
 }
