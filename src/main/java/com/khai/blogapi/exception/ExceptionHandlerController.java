@@ -41,5 +41,15 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
 				request.getDescription(false));
 		return new ResponseEntity<>(details,HttpStatus.CONFLICT);
 	}
+	
+	@ExceptionHandler(UserNotFoundException.class)
+	public ResponseEntity<ExceptionDetails> UserNotFound(
+			UserNotFoundException e, WebRequest request){
+		ExceptionDetails details = new ExceptionDetails(
+				new Date(),
+				e.getMessage(),
+				request.getDescription(false));
+		return new ResponseEntity<>(details,HttpStatus.NOT_FOUND);
+	}
 
 }

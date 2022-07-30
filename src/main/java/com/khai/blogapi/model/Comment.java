@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
@@ -46,4 +47,9 @@ public class Comment {
 	@JoinColumn(name = "blog_id", referencedColumnName = "id")
 	@JsonProperty(access = Access.WRITE_ONLY)
 	private Blog blog;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_id", referencedColumnName = "id")
+	@JsonIgnore
+	private User user;
 }

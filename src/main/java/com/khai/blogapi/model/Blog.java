@@ -73,6 +73,10 @@ public class Blog {
 			)
 	private List<Tag> tags;
 
+	@ManyToOne
+	@JoinColumn(name = "user_id", referencedColumnName = "id")
+	private User user;
+	
 	public List<Comment> getComments() {
 		return comments == null ? null : new ArrayList<>(this.comments);
 	}
