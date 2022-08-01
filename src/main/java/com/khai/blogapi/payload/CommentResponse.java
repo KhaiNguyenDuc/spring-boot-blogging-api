@@ -18,4 +18,6 @@ public class CommentResponse {
 	private Date lastUpdate;
 	
 	private Long blogId;
+	
+	private Long userId;
 }

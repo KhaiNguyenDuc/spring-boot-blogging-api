@@ -89,7 +89,7 @@ public class User {
 			)
 	private List<Role> roles;
 	
-	
+	@JsonIgnore
 	public List<Blog> getBlogs() {
 		return blogs == null ? null : new ArrayList<>(this.blogs);
 	}
@@ -102,6 +102,7 @@ public class User {
 		}
 	}
 
+	@JsonIgnore
 	public List<Comment> getComments() {
 		return comments == null ? null : new ArrayList<>(this.comments);
 	}
@@ -114,6 +115,7 @@ public class User {
 		}
 	}
 
+	@JsonIgnore
 	public List<Category> getCategories() {
 		return categories == null ? null : new ArrayList<>(this.categories);
 	}
@@ -130,6 +132,7 @@ public class User {
 		return this.enabled;
 	}
 
+	@JsonIgnore
 	public List<Role> getRoles() {
 		return roles == null ? null : new ArrayList<>(this.roles);
 	}
@@ -141,6 +144,14 @@ public class User {
 			this.roles = roles;	
 		}
 		
+	}
+	
+	public void removeRole(Role role) {
+		this.roles.remove(role);
+	}
+	
+	public void addRole(Role role) {
+		this.roles.add(role);
 	}
 	
 	

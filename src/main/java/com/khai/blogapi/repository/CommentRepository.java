@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.khai.blogapi.model.Blog;
 import com.khai.blogapi.model.Comment;
+import com.khai.blogapi.model.User;
 
 @Repository
 @Transactional
@@ -17,5 +18,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 	Page<Comment> findByBlog(Blog blog, Pageable pageable);
 
 	void deleteAllByBlog(Blog blog);
+
+	Page<Comment> findByUser(User user, Pageable pageable);
 
 }

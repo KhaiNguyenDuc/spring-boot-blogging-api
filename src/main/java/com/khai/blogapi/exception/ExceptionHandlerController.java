@@ -61,5 +61,15 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
 				request.getDescription(false));
 		return new ResponseEntity<>(details,HttpStatus.UNAUTHORIZED);
 	}
+	
+	@ExceptionHandler(AccessDeniedException.class)
+	public ResponseEntity<ExceptionDetails> permissionDeny(
+			AccessDeniedException e, WebRequest request){
+		ExceptionDetails details = new ExceptionDetails(
+				new Date(),
+				e.getMessage(),
+				request.getDescription(false));
+		return new ResponseEntity<>(details,HttpStatus.FORBIDDEN);
+	}
 
 }

@@ -9,18 +9,24 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
+import com.khai.blogapi.exception.AccessDeniedException;
 import com.khai.blogapi.exception.ResourceExistException;
 import com.khai.blogapi.exception.ResourceNotFoundException;
 import com.khai.blogapi.model.Blog;
+import com.khai.blogapi.model.RoleName;
 import com.khai.blogapi.model.Tag;
+import com.khai.blogapi.model.User;
 import com.khai.blogapi.payload.ApiResponse;
 import com.khai.blogapi.payload.PageResponse;
 import com.khai.blogapi.payload.TagRequest;
 import com.khai.blogapi.payload.TagResponse;
 import com.khai.blogapi.repository.BlogRepository;
 import com.khai.blogapi.repository.TagRepository;
+import com.khai.blogapi.repository.UserRepository;
+import com.khai.blogapi.security.UserPrincipal;
 import com.khai.blogapi.service.TagService;
 import com.khai.blogapi.utils.AppConstant;
 import com.khai.blogapi.utils.AppUtils;
@@ -33,6 +39,9 @@ public class TagServiceImpl implements TagService {
 	
 	@Autowired
 	BlogRepository blogRepository;
+	
+	@Autowired
+	UserRepository userRepository;
 
 	@Autowired
 	ModelMapper modelMapper;
@@ -117,18 +126,27 @@ public class TagServiceImpl implements TagService {
 	}
 
 	@Override
-	public ApiResponse removeTagsByBlog(Long blogId) {
+	public ApiResponse removeTagsByBlog(Long blogId, UserPrincipal userPrincipal) {
 		Blog blog = blogRepository.findById(blogId)
 				.orElseThrow(() -> new ResourceNotFoundException(
 						AppConstant.BLOG_NOT_FOUND + blogId));
-		
-		List<Tag> tags = tagRepository.findAllByBlogs(blog);
-		for (Tag tag : tags) {
-			tag.removeBlog(blog);
+		User user = userRepository.findByBlogs(blog);
+		if(user.getId().equals(userPrincipal.getId()) ||
+				userPrincipal.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_"+RoleName.ADMIN))) {
+			
+			List<Tag> tags = tagRepository.findAllByBlogs(blog);
+			for (Tag tag : tags) {
+				tag.removeBlog(blog);
+			}
+			
+			tagRepository.saveAll(tags);
+			return new ApiResponse(Boolean.TRUE,AppConstant.TAG_DELETE_MESSAGE,HttpStatus.OK);
+			
 		}
+		throw new AccessDeniedException(AppConstant.TAG_REMOVE_DENY);
+			
 		
-		tagRepository.saveAll(tags);
-		return new ApiResponse(Boolean.TRUE,AppConstant.TAG_DELETE_MESSAGE,HttpStatus.OK);
+		
 	}
 
 	@Override

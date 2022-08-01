@@ -17,6 +17,8 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.NaturalId;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -45,6 +47,7 @@ public class Role {
 			)
 	private List<User> users;
 
+	@JsonIgnore
 	public List<User> getUsers() {
 		return users == null ? null : new ArrayList<>(this.users);
 	}

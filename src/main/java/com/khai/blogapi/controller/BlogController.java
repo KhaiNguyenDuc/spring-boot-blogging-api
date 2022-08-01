@@ -3,6 +3,7 @@ package com.khai.blogapi.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +21,8 @@ import com.khai.blogapi.payload.CommentRequest;
 import com.khai.blogapi.payload.CommentResponse;
 import com.khai.blogapi.payload.PageResponse;
 import com.khai.blogapi.payload.TagResponse;
+import com.khai.blogapi.security.CurrentUser;
+import com.khai.blogapi.security.UserPrincipal;
 import com.khai.blogapi.service.BlogService;
 import com.khai.blogapi.service.CommentService;
 import com.khai.blogapi.service.TagService;
@@ -73,47 +76,59 @@ public class BlogController {
 	}
 	
 	@PostMapping("/{blog_id}/comments")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
 	public ResponseEntity<CommentResponse> addComment(
 			@PathVariable("blog_id") Long blogId,
-			@RequestBody CommentRequest commentRequest){
+			@RequestBody CommentRequest commentRequest,
+			@CurrentUser UserPrincipal userPrincipal){
 		CommentResponse commentResponses = 
-				commentService.addComment(commentRequest,blogId);
+				commentService.addComment(blogId,commentRequest,userPrincipal);
 		return new ResponseEntity<>(commentResponses,HttpStatus.CREATED);
 	}
 	
 	@PostMapping
+	@PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
 	public ResponseEntity<BlogResponse> addBlog(
-			@RequestBody BlogRequest blogRequest){
-		BlogResponse blogResponse = blogService.addBlog(blogRequest);
+			@RequestBody BlogRequest blogRequest,
+			@CurrentUser UserPrincipal userPrincipal){
+		BlogResponse blogResponse = blogService.addBlog(blogRequest,userPrincipal);
 		return new ResponseEntity<>(blogResponse,HttpStatus.CREATED);
 	}
 	
 	@DeleteMapping("/{blog_id}")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
 	public ResponseEntity<ApiResponse> deleteBlogById(
-			@PathVariable("blog_id") Long blogId){
-		ApiResponse response = blogService.deleteBlogById(blogId);
+			@PathVariable("blog_id") Long blogId,
+			@CurrentUser UserPrincipal userPrincipal){
+		ApiResponse response = blogService.deleteBlogById(blogId,userPrincipal);
 		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/{blog_id}/comments")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
 	public ResponseEntity<ApiResponse> deleteCommentsByBlog(
-			@PathVariable("blog_id") Long blogId){
-		ApiResponse response = commentService.deleteCommentsByBlog(blogId);
+			@PathVariable("blog_id") Long blogId,
+			@CurrentUser UserPrincipal userPrincipal){
+		ApiResponse response = commentService.deleteCommentsByBlog(blogId,userPrincipal);
 		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/{blog_id}/tags")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
 	public ResponseEntity<ApiResponse> removeTagsByBlog(
-			@PathVariable("blog_id") Long blogId){
-		ApiResponse response = tagService.removeTagsByBlog(blogId);
+			@PathVariable("blog_id") Long blogId,
+			@CurrentUser UserPrincipal userPrincipal){
+		ApiResponse response = tagService.removeTagsByBlog(blogId,userPrincipal);
 		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 	
 	@PutMapping("/{blog_id}")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
 	public ResponseEntity<BlogResponse> updateBlogById(
 			@PathVariable("blog_id") Long blogId,
-			@RequestBody BlogRequest blogRequest){
-		BlogResponse blogResponse = blogService.updateBlogById(blogId,blogRequest);
+			@RequestBody BlogRequest blogRequest,
+			@CurrentUser UserPrincipal userPrincipal){
+		BlogResponse blogResponse = blogService.updateBlogById(blogId,blogRequest,userPrincipal);
 		return new ResponseEntity<>(blogResponse,HttpStatus.OK);
 	}
 }

@@ -33,6 +33,8 @@ public class BlogResponse {
 	private List<Comment> comments;
 
 	private Long categoryId;
+	
+	private Long userId;
 
 	private List<Tag> tags;
 

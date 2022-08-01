@@ -30,7 +30,7 @@ public class UserPrincipal implements UserDetails {
 	private String phoneNumber;
 	private String image;
 	private Boolean enabled;
-	
+
 	private List<GrantedAuthority> authorities;
 
 	public UserPrincipal(Long id, String username, String firstName, String lastName, String email, String password,
@@ -130,8 +130,6 @@ public class UserPrincipal implements UserDetails {
 		return Objects.hash(id);
 	}
 
-	
-	
 	
 	
 
