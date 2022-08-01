@@ -18,6 +18,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -73,6 +77,11 @@ public class Blog {
 			)
 	private List<Tag> tags;
 
+	@ManyToOne
+	@JoinColumn(name = "user_id", referencedColumnName = "id")
+	@JsonProperty(access = Access.WRITE_ONLY)
+	private User user;
+	
 	public List<Comment> getComments() {
 		return comments == null ? null : new ArrayList<>(this.comments);
 	}

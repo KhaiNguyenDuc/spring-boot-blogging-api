@@ -4,6 +4,7 @@ import com.khai.blogapi.payload.ApiResponse;
 import com.khai.blogapi.payload.PageResponse;
 import com.khai.blogapi.payload.TagRequest;
 import com.khai.blogapi.payload.TagResponse;
+import com.khai.blogapi.security.UserPrincipal;
 
 public interface TagService {
 
@@ -19,7 +20,7 @@ public interface TagService {
 
 	ApiResponse deleteAllTag();
 
-	ApiResponse removeTagsByBlog(Long blogId);
+	ApiResponse removeTagsByBlog(Long blogId, UserPrincipal userPrincipal);
 
 	TagResponse updateTagById(Long tagId, TagRequest tagRequest);
 

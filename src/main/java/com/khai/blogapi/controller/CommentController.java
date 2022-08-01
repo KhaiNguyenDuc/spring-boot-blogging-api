@@ -3,6 +3,7 @@ package com.khai.blogapi.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +17,8 @@ import com.khai.blogapi.payload.ApiResponse;
 import com.khai.blogapi.payload.CommentRequest;
 import com.khai.blogapi.payload.CommentResponse;
 import com.khai.blogapi.payload.PageResponse;
+import com.khai.blogapi.security.CurrentUser;
+import com.khai.blogapi.security.UserPrincipal;
 import com.khai.blogapi.service.CommentService;
 import com.khai.blogapi.utils.AppConstant;
 
@@ -43,17 +46,21 @@ public class CommentController {
 	}
 	
 	@DeleteMapping("/{comment_id}")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
 	public ResponseEntity<ApiResponse> deleteCommentById(
-			@PathVariable("comment_id") Long commentId){
-		ApiResponse response = commentService.deleteById(commentId);
+			@PathVariable("comment_id") Long commentId,
+			@CurrentUser UserPrincipal userPrincipal){
+		ApiResponse response = commentService.deleteById(commentId,userPrincipal);
 		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 	
 	@PutMapping("/{comment_id}")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
 	public ResponseEntity<CommentResponse> updateCommentById(
 			@PathVariable("comment_id") Long commentId,
-			@RequestBody CommentRequest commentRequest){
-		CommentResponse commentResponses = commentService.updateCommentById(commentId,commentRequest);
+			@RequestBody CommentRequest commentRequest,
+			@CurrentUser UserPrincipal userPrincipal){
+		CommentResponse commentResponses = commentService.updateCommentById(commentId,commentRequest,userPrincipal);
 		return new ResponseEntity<>(commentResponses,HttpStatus.OK);
 	}
 	

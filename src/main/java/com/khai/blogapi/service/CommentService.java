@@ -4,6 +4,7 @@ import com.khai.blogapi.payload.ApiResponse;
 import com.khai.blogapi.payload.CommentRequest;
 import com.khai.blogapi.payload.CommentResponse;
 import com.khai.blogapi.payload.PageResponse;
+import com.khai.blogapi.security.UserPrincipal;
 
 public interface CommentService {
 
@@ -13,12 +14,14 @@ public interface CommentService {
 
 	PageResponse<CommentResponse> getCommentsByBlog(Long blogId, Integer page, Integer size);
 
-	CommentResponse addComment(CommentRequest commentRequest, Long blogId);
+	ApiResponse deleteById(Long commentId, UserPrincipal userPrincipal);
 
-	ApiResponse deleteById(Long commentId);
+	ApiResponse deleteCommentsByBlog(Long blogId, UserPrincipal userPrincipal);
 
-	ApiResponse deleteCommentsByBlog(Long blogId);
+	CommentResponse updateCommentById(Long commentId, CommentRequest commentRequest, UserPrincipal userPrincipal);
 
-	CommentResponse updateCommentById(Long commentId, CommentRequest commentRequest);
+	PageResponse<CommentResponse> getCommentsByUsername(String username, Integer page, Integer size);
+
+	CommentResponse addComment(Long blogId, CommentRequest commentRequest, UserPrincipal userPrincipal);
 
 }

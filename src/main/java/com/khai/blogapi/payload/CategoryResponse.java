@@ -18,6 +18,8 @@ public class CategoryResponse {
 
 	private String title;
 	
+	private Long userId;
+	
 	private List<Blog> blogs;
 	
 	public List<Blog> getBlogs() {

@@ -3,6 +3,7 @@ package com.khai.blogapi.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +19,8 @@ import com.khai.blogapi.payload.BlogResponse;
 import com.khai.blogapi.payload.CategoryRequest;
 import com.khai.blogapi.payload.CategoryResponse;
 import com.khai.blogapi.payload.PageResponse;
+import com.khai.blogapi.security.CurrentUser;
+import com.khai.blogapi.security.UserPrincipal;
 import com.khai.blogapi.service.BlogService;
 import com.khai.blogapi.service.CategoryService;
 import com.khai.blogapi.utils.AppConstant;
@@ -60,39 +63,48 @@ public class CategoryController {
 	}
 	
 	@PostMapping
+	@PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
 	public ResponseEntity<CategoryResponse> createCategory(
-			@RequestBody CategoryRequest categoryRequest){
+			@RequestBody CategoryRequest categoryRequest,
+			@CurrentUser UserPrincipal userPrincipal){
 		CategoryResponse categoryResponse = 
-				categoryService.createCategory(categoryRequest);
+				categoryService.createCategory(categoryRequest,userPrincipal);
 		return new ResponseEntity<>(categoryResponse,HttpStatus.CREATED);
 	}
 	
 	@DeleteMapping("/{category_id}")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
 	public ResponseEntity<ApiResponse> deleteCategoryById(
-			@PathVariable("category_id") Long categoryId) {
-		ApiResponse response = categoryService.deleteCategoryById(categoryId);
+			@PathVariable("category_id") Long categoryId,
+			@CurrentUser UserPrincipal userPrincipal) {
+		ApiResponse response = categoryService.deleteCategoryById(categoryId,userPrincipal);
 		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 	
 	@DeleteMapping
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<ApiResponse> deleteAll(){
 		ApiResponse response = categoryService.deleteAll();
 		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/{category_id}/blogs")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
 	public ResponseEntity<ApiResponse> deleteBlogsByCategory(
-			@PathVariable("category_id") Long categoryId) {
-		ApiResponse response = blogService.deleteBlogsByCategory(categoryId);
+			@PathVariable("category_id") Long categoryId,
+			@CurrentUser UserPrincipal userPrincipal) {
+		ApiResponse response = blogService.deleteBlogsByCategory(categoryId,userPrincipal);
 		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 	
 	@PutMapping("/{category_id}")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
 	public ResponseEntity<CategoryResponse> updateCategoryById(
 			@PathVariable("category_id") Long categoryId,
-			@RequestBody CategoryRequest categoryRequest){
+			@RequestBody CategoryRequest categoryRequest,
+			@CurrentUser UserPrincipal userPrincipal){
 		CategoryResponse categoryResponse = 
-				categoryService.updateCategoryById(categoryId,categoryRequest);
+				categoryService.updateCategoryById(categoryId,categoryRequest,userPrincipal);
 		return new ResponseEntity<>(categoryResponse,HttpStatus.OK);
 	} 
 	
