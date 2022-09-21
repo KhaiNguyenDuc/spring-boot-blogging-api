@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.Rollback;
 
 import com.khai.blogapi.model.Blog;
@@ -55,6 +56,9 @@ class BlogRepositoryTest {
 	
 	@Autowired
 	ModelMapper modelMapper;
+	
+	@Autowired
+	PasswordEncoder passwordEncoder;
 
 	@Test
 	@Order(1)
@@ -71,7 +75,7 @@ class BlogRepositoryTest {
 		user.setLastName("Last name");
 		user.setImage("Image");
 		user.setPhoneNumber("Phone number");
-		user.setPassword("123");
+		user.setPassword(passwordEncoder.encode("123"));
 		user.setUsername("khai");
 
 		Role role = new Role();
@@ -94,7 +98,7 @@ class BlogRepositoryTest {
 		userSub.setLastName("Last name sub");
 		userSub.setImage("Image sub");
 		userSub.setPhoneNumber("Phone number sub");
-		userSub.setPassword("123");
+		userSub.setPassword(passwordEncoder.encode("123"));
 		userSub.setUsername("kiet");
 
 		Role roleSub = new Role();
@@ -117,7 +121,7 @@ class BlogRepositoryTest {
 		userSub1.setLastName("Last name sub1");
 		userSub1.setImage("Image sub1");
 		userSub1.setPhoneNumber("Phone number sub1");
-		userSub1.setPassword("123");
+		userSub1.setPassword(passwordEncoder.encode("123"));
 		userSub1.setUsername("khang");
 
 		Role roleSub1 = new Role();

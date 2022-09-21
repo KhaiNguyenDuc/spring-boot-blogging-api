@@ -8,8 +8,6 @@ import java.util.Objects;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.khai.blogapi.model.Role;
 import com.khai.blogapi.model.User;
@@ -81,7 +79,7 @@ public class UserPrincipal implements UserDetails {
 
 	@Override
 	public String getPassword() {
-		return passwordEncoder().encode(this.password);
+		return this.password;
 	}
 
 	@Override
@@ -110,10 +108,6 @@ public class UserPrincipal implements UserDetails {
 		return this.enabled;
 	}
 	
-	public static PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
-
 
 	@Override
 	public boolean equals(Object object) {

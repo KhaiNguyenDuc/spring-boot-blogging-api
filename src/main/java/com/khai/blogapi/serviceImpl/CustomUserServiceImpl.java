@@ -8,14 +8,13 @@ import org.springframework.stereotype.Service;
 
 import com.khai.blogapi.exception.UserNotFoundException;
 import com.khai.blogapi.model.User;
-import com.khai.blogapi.payload.UserResponse;
 import com.khai.blogapi.repository.UserRepository;
 import com.khai.blogapi.security.UserPrincipal;
-import com.khai.blogapi.service.UserService;
+import com.khai.blogapi.service.CustomUserService;
 import com.khai.blogapi.utils.AppConstant;
 
 @Service
-public class CustomUserServiceImpl implements UserDetailsService {
+public class CustomUserServiceImpl implements UserDetailsService, CustomUserService {
 
 	@Autowired
 	UserRepository userRepository;
@@ -27,6 +26,14 @@ public class CustomUserServiceImpl implements UserDetailsService {
 						AppConstant.USER_NOT_FOUND + username));
 		return UserPrincipal.create(user);
 
+	}
+
+	@Override
+	public UserPrincipal loadUserByUserId(Long userId) {
+		User user = userRepository.findById(userId)
+				.orElseThrow(() -> new UserNotFoundException(
+						AppConstant.USER_NOT_FOUND + "id" + userId));
+		return UserPrincipal.create(user);
 	}
 
 	

@@ -7,7 +7,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +20,6 @@ import com.khai.blogapi.payload.CategoryResponse;
 import com.khai.blogapi.payload.CommentResponse;
 import com.khai.blogapi.payload.PageResponse;
 import com.khai.blogapi.payload.UserProfileResponse;
-import com.khai.blogapi.payload.UserRequest;
 import com.khai.blogapi.payload.UserResponse;
 import com.khai.blogapi.security.CurrentUser;
 import com.khai.blogapi.security.UserPrincipal;
@@ -101,16 +99,6 @@ public class UserController {
 				size);
 		return new ResponseEntity<>(categoriesResponse, HttpStatus.OK);
 	}
-
-	@PostMapping
-	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<UserProfileResponse> createUser(
-			@RequestBody UserRequest userRequest
-			){
-		UserProfileResponse userProfile = userService.createUser(userRequest);
-		return new ResponseEntity<>(userProfile,HttpStatus.CREATED);
-	}
-	
 	
 	@DeleteMapping("/{username}")
 	@PreAuthorize("hasRole('ADMIN')")
@@ -127,20 +115,5 @@ public class UserController {
 		return new ResponseEntity<>(userResponse, HttpStatus.OK);
 	}
 
-	@PutMapping("/{username}/admins-permission")
-	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<ApiResponse> giveAdmin(
-			@PathVariable("username") String username) {
-		ApiResponse response = userService.giveAdmin(username);
-		return new ResponseEntity<>(response, HttpStatus.OK);
-	}
-
-	@PutMapping("/{username}/admins-denial")
-	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<ApiResponse> takeAdmin(
-			@PathVariable("username") String username) {
-		ApiResponse response = userService.takeAdmin(username);
-		return new ResponseEntity<>(response, HttpStatus.OK);
-	}
 
 }
