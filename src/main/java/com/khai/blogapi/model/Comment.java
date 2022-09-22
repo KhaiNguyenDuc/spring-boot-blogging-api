@@ -41,12 +41,6 @@ public class Comment extends UserDateAudit {
 	@Column(name = "body")
 	private String body;
 	
-	@Column(name = "create_date")
-	private Date createDate;
-	
-	@Column(name = "last_update")
-	private Date lastUpdate;
-	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "blog_id", referencedColumnName = "id")
 	@JsonProperty(access = Access.WRITE_ONLY)

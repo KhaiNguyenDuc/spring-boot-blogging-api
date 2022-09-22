@@ -192,8 +192,6 @@ class BlogRepositoryTest {
 
 		blogRequest.setImage("Image link");
 		blogRequest.setBody("Body");
-		blogRequest.setLastUpdate(null);
-		blogRequest.setCreateDate(new Date());
 		blogRequest.setPublished(true);
 		blogRequest.setDescription("This is description");
 		blogRequest.setTitle("This is title");
@@ -224,8 +222,6 @@ class BlogRepositoryTest {
 		commentRequest.setBody("This is body");
 
 		Comment comment = modelMapper.map(commentRequest, Comment.class);
-		comment.setLastUpdate(null);
-		comment.setCreateDate(new Date());
 		comment.setBlog(blog);
 		comment.setUser(user);
 		
@@ -241,8 +237,6 @@ class BlogRepositoryTest {
 
 
 		Comment comment2 = modelMapper.map(commentRequest2, Comment.class);
-		comment2.setLastUpdate(null);
-		comment2.setCreateDate(new Date());
 		comment2.setBlog(blog);
 		comment2.setUser(user);
 		commentRepository.save(comment2);

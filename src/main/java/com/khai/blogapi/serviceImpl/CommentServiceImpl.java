@@ -1,7 +1,6 @@
 package com.khai.blogapi.serviceImpl;
 
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
@@ -106,11 +105,12 @@ public class CommentServiceImpl implements CommentService {
 
 		comment.setUser(user);
 		comment.setBlog(blog);
-		comment.setCreateDate(new Date());
 
 		commentRepository.save(comment);
-
-		return modelMapper.map(comment, CommentResponse.class);
+		CommentResponse commentResponse =
+				modelMapper.map(comment, CommentResponse.class);
+		
+		return commentResponse;
 	}
 
 	@Override
@@ -163,8 +163,11 @@ public class CommentServiceImpl implements CommentService {
 			modelMapper.map(commentRequest, comment);
 
 			commentRepository.save(comment);
-
-			return modelMapper.map(comment, CommentResponse.class);
+			
+			CommentResponse commentResponse = 
+					modelMapper.map(comment, CommentResponse.class);
+			
+			return commentResponse;
 		}
 		
 		throw new AccessDeniedException(AppConstant.COMMENT_UPDATE_DENY);

@@ -1,7 +1,6 @@
 package com.khai.blogapi.payload;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import com.khai.blogapi.model.Comment;
@@ -25,10 +24,6 @@ public class BlogResponse {
 	private Long views;
 
 	private Boolean published;
-
-	private Date createDate;
-
-	private Date lastUpdate;
 
 	private List<Comment> comments;
 

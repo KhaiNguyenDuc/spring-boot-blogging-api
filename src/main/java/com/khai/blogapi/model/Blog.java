@@ -1,7 +1,6 @@
 package com.khai.blogapi.model;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -18,7 +17,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
@@ -58,12 +56,6 @@ public class Blog extends UserDateAudit{
 	
 	@Column(name = "published")
 	private Boolean published;
-	
-	@Column(name = "create_date")
-	private Date createDate;
-	
-	@Column(name = "last_update")
-	private Date lastUpdate;
 	
 	@OneToMany(mappedBy = "blog", cascade = CascadeType.ALL, 
 			orphanRemoval = true)

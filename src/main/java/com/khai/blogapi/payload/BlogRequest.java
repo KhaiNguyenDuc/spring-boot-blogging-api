@@ -24,10 +24,6 @@ public class BlogRequest {
 	
 	private Boolean published;
 	
-	private Date createDate;
-	
-	private Date lastUpdate;
-	
 	private Long categoryId;
 	
 	private List<Comment> comments;

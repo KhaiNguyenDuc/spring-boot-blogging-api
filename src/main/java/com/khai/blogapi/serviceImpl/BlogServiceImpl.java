@@ -221,10 +221,8 @@ public class BlogServiceImpl implements BlogService {
 					.orElseThrow(() -> new ResourceNotFoundException(AppConstant.CATEGORY_NOT_FOUND + categoryId));
 
 			blog.setBody(blogRequest.getBody());
-			blog.setCreateDate(blogRequest.getCreateDate());
 			blog.setDescription(blogRequest.getDescription());
 			blog.setImage(blogRequest.getImage());
-			blog.setLastUpdate(blogRequest.getLastUpdate());
 			blog.setPublished(blogRequest.getPublished());
 			blog.setTitle(blogRequest.getTitle());
 			blog.setViews(blogRequest.getViews());
