@@ -133,7 +133,7 @@ public class UserServiceImpl implements UserService {
 			user.setBirthday(userUpdate.getBirthday());
 			user.setFirstName(userUpdate.getFirstName());
 			user.setLastName(userUpdate.getLastName());
-			user.setPassword(userUpdate.getPassword());
+			user.setPassword(passwordEncoder.encode(userUpdate.getPassword()));
 			user.setEmail(userUpdate.getEmail());
 			user.setEnabled(userUpdate.getEnabled());
 			user.setImage(userUpdate.getImage());

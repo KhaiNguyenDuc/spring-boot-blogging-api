@@ -32,13 +32,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			throws ServletException, IOException {
 		
 		try {
-			System.out.println("aaaaaaaaaaaa");
 			String token = tokenProvider.resolveToken(request);
-			System.out.println(token);
 			if(tokenProvider.validateToken(token) && StringUtils.hasText(token)) {
 				
 				Long userId = tokenProvider.getUserIdFromJwt(token);
-				log.info(userId.toString());
 				UserPrincipal userPrincipal = userService.loadUserByUserId(userId);
 				UsernamePasswordAuthenticationToken authenticationToken = 
 						new UsernamePasswordAuthenticationToken(
