@@ -24,14 +24,18 @@ import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Entity
+@EqualsAndHashCode(callSuper = true)
 @Table(name = "blogs")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Blog {
+public class Blog extends UserDateAudit{
+
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

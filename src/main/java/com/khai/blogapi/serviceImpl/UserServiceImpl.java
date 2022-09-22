@@ -9,6 +9,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.khai.blogapi.exception.AccessDeniedException;
@@ -42,8 +43,12 @@ public class UserServiceImpl implements UserService {
 	RoleRepository roleRepository;
 	
 	@Autowired
+	PasswordEncoder passwordEncoder;
+	
+	@Autowired
 	ModelMapper modelMapper;
 	
+
 	@Override
 	public UserProfileResponse getCurrentUser(UserPrincipal userPrincipal) {
 		
@@ -205,7 +210,7 @@ public class UserServiceImpl implements UserService {
 		
 		User user = modelMapper.map(userRequest, User.class);
 		user.setRoles(Arrays.asList(role));
-		
+		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		userRepository.save(user);
 		
 		return modelMapper.map(user, UserProfileResponse.class);

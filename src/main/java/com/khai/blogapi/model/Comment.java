@@ -18,15 +18,19 @@ import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Entity
+@EqualsAndHashCode(callSuper = true)
 @Table(name = "comments")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Comment {
+public class Comment extends UserDateAudit {
 	
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
