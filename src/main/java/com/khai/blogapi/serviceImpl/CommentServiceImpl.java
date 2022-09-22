@@ -48,6 +48,7 @@ public class CommentServiceImpl implements CommentService {
 
 	@Override
 	public PageResponse<CommentResponse> getAllComments(Integer page, Integer size) {
+
 		AppUtils.validatePageAndSize(page, size);
 		Pageable pageable = PageRequest.of(page, size);
 		Page<Comment> comments = commentRepository.findAll(pageable);
@@ -67,6 +68,7 @@ public class CommentServiceImpl implements CommentService {
 
 	@Override
 	public CommentResponse getCommentById(Long commentId) {
+
 		Comment comment = commentRepository.findById(commentId)
 				.orElseThrow(() -> new ResourceNotFoundException(AppConstant.COMMENT_NOT_FOUND + commentId));
 		return modelMapper.map(comment, CommentResponse.class);
@@ -74,6 +76,7 @@ public class CommentServiceImpl implements CommentService {
 
 	@Override
 	public PageResponse<CommentResponse> getCommentsByBlog(Long blogId, Integer page, Integer size) {
+
 		AppUtils.validatePageAndSize(page, size);
 		Pageable pageable = PageRequest.of(page, size);
 		Blog blog = blogRepository.findById(blogId)
@@ -96,6 +99,7 @@ public class CommentServiceImpl implements CommentService {
 
 	@Override
 	public CommentResponse addComment(Long blogId, CommentRequest commentRequest, UserPrincipal userPrincipal) {
+		
 		Comment comment = modelMapper.map(commentRequest, Comment.class);
 
 		Blog blog = blogRepository.findById(blogId)
@@ -152,7 +156,7 @@ public class CommentServiceImpl implements CommentService {
 
 	@Override
 	public CommentResponse updateCommentById(Long commentId, CommentRequest commentRequest, UserPrincipal userPrincipal) {
-
+		
 		Comment comment = commentRepository.findById(commentId)
 				.orElseThrow(() -> new ResourceNotFoundException(AppConstant.COMMENT_NOT_FOUND + commentId));
 		User user = userRepository.findByComments(comment);
@@ -162,10 +166,13 @@ public class CommentServiceImpl implements CommentService {
 
 			modelMapper.map(commentRequest, comment);
 
-			commentRepository.save(comment);
+			Comment commentSaved = commentRepository.save(comment);
+			
+			
 			
 			CommentResponse commentResponse = 
-					modelMapper.map(comment, CommentResponse.class);
+					modelMapper.map(commentSaved, CommentResponse.class);
+		
 			
 			return commentResponse;
 		}
@@ -195,5 +202,6 @@ public class CommentServiceImpl implements CommentService {
 
 		return pageResponse;
 	}
+
 
 }

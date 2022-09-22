@@ -4,11 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.khai.blogapi.model.Blog;
+import com.khai.blogapi.model.UserDateAudit;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
-public class CategoryResponse {
+@EqualsAndHashCode(callSuper = true)
+public class CategoryResponse extends UserDateAudit{
+
+	private static final long serialVersionUID = 1L;
 
 	private Long id;
 	
@@ -21,6 +26,7 @@ public class CategoryResponse {
 	private Long userId;
 	
 	private List<Blog> blogs;
+	
 	
 	public List<Blog> getBlogs() {
 		return blogs == null ? null : new ArrayList<>(this.blogs);

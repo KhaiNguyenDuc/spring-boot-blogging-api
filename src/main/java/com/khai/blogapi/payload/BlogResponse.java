@@ -5,12 +5,17 @@ import java.util.List;
 
 import com.khai.blogapi.model.Comment;
 import com.khai.blogapi.model.Tag;
+import com.khai.blogapi.model.UserDateAudit;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
-public class BlogResponse {
-	
+@EqualsAndHashCode(callSuper = true)
+public class BlogResponse extends UserDateAudit{
+
+	private static final long serialVersionUID = 1L;
+
 	private Long id;
 
 	private String title;
@@ -32,6 +37,7 @@ public class BlogResponse {
 	private Long userId;
 
 	private List<Tag> tags;
+
 
 	public List<Comment> getComments() {
 		return comments == null ? null : new ArrayList<>(this.comments);

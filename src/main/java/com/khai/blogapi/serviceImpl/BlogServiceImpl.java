@@ -55,9 +55,11 @@ public class BlogServiceImpl implements BlogService {
 
 	@Autowired
 	ModelMapper modelMapper;
+	
 
 	@Override
 	public PageResponse<BlogResponse> getAllBlogs(Integer page, Integer size) {
+
 		AppUtils.validatePageAndSize(page, size);
 		Pageable pageable = PageRequest.of(page, size);
 		Page<Blog> blogs = blogRepository.findAll(pageable);
@@ -76,6 +78,7 @@ public class BlogServiceImpl implements BlogService {
 
 	@Override
 	public BlogResponse getBlogsById(Long blogId) {
+
 		Blog blog = blogRepository.findById(blogId)
 				.orElseThrow(() -> new ResourceNotFoundException(AppConstant.BLOG_NOT_FOUND + blogId));
 		return modelMapper.map(blog, BlogResponse.class);
@@ -105,6 +108,7 @@ public class BlogServiceImpl implements BlogService {
 
 	@Override
 	public PageResponse<BlogResponse> getBlogsByTag(Long tagId, Integer page, Integer size) {
+
 		AppUtils.validatePageAndSize(page, size);
 		Pageable pageable = PageRequest.of(page, size);
 		Tag tag = tagRepository.findById(tagId)
@@ -257,5 +261,5 @@ public class BlogServiceImpl implements BlogService {
 
 		return pageResponse;
 	}
-
+	
 }

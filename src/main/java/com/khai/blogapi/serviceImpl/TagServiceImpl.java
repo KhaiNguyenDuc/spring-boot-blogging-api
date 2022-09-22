@@ -154,10 +154,7 @@ public class TagServiceImpl implements TagService {
 		Tag tag = tagRepository.findById(tagId)
 				.orElseThrow(() -> new ResourceNotFoundException(
 						AppConstant.TAG_NOT_FOUND+ tagId));
-		System.out.println(tag.getName());
 		modelMapper.map(tagRequest, tag);
-		
-		System.out.println(tag.getName());
 		tagRepository.save(tag);
 		
 		

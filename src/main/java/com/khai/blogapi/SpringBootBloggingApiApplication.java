@@ -9,5 +9,7 @@ public class SpringBootBloggingApiApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(SpringBootBloggingApiApplication.class, args);
 	}
+	
+	// Not able tp map auditing field on getAllCommentss
 
 }
